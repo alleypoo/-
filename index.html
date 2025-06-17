@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>오늘의 감성 노래 추천</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: linear-gradient(to bottom, #a0cfff, #e0f7ff);
+      color: #003366;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #3388cc;
+      color: white;
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2266aa;
+    }
+    .song-list {
+      margin-top: 30px;
+      font-size: 1.1em;
+      line-height: 2em;
+    }
+    .quote {
+      margin-top: 15px;
+      font-style: italic;
+      font-size: 0.95em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎧 오늘의 감성 노래 추천</h1>
+  <button onclick="recommendRandom()">🎲 오늘의 노래 추천</button>
+  <button onclick="showEmotionOptions()">💙 감정으로 추천받기</button>
+
+  <div id="emotion-buttons" style="display:none; margin-top:20px;">
+    <button onclick="recommendByEmotion('전체')">🎼 전체</button>
+    <button onclick="recommendByEmotion('행복')">😊 행복</button>
+    <button onclick="recommendByEmotion('우울')">😢 우울</button>
+    <button onclick="recommendByEmotion('분위기')">🌙 분위기</button>
+    <button onclick="recommendByEmotion('공부')">📚 집중</button>
+  </div>
+
+  <div class="song-list" id="result"></div>
+
+  <script>
+    const quotes = {
+      행복: [
+        "행복은 향기와 같아서 남에게 주지 않으면 나도 가질 수 없다.",
+        "웃음은 마음의 햇살이다.",
+        "지금 이 순간이 너의 인생에서 가장 젊은 순간이야."
+      ],
+      우울: [
+        "괜찮아, 울어도 돼. 그 눈물은 자라는 중이야.",
+        "비 오는 날이 있어야 무지개도 뜨지. 너도 그래.",
+        "고요한 밤이 깊을수록 별은 더 밝게 빛난다."
+      ],
+      분위기: [
+        "감성은 기억을 꺼내주는 마법의 열쇠야.",
+        "어두운 공간에 작은 노래 하나면 그게 분위기지.",
+        "무드 있는 하루, 너에게 어울리는 배경음악."
+      ],
+      공부: [
+        "집중은 습관이고, 습관은 반복이야.",
+        "공부는 너를 배신하지 않아. 단 한 번도.",
+        "음악으로 흐름을 잡고, 오늘도 한 걸음."
+      ]
+    };
+
+    const fullSongList = [
+      "Drowning – WOODZ", "Never Ending Story – IU", "To Reach You – 10CM",
+      "123‑78 – BOYNEXTDOOR", "Whiplash – aespa", "like JENNIE – Jennie",
+      "시작의 아이 – Maktub", "모르시나요 – 조째즈", "Hearts2Hearts – Hearts2Hearts",
+      "QWER – QWER", "Thunder – Seventeen", "Apt. – Rosé & Bruno Mars",
+      "Messy – Rosé", "HANDS UP – Meovv", "IF I SAY, I LOVE YOU – BOYNEXTDOOR",
+      "Pink Venom – BLACKPINK", "DRIP – BABYMONSTER", "CRAZY – LE SSERAFIM",
+      "Castle – ATEEZ", "Masterpiece – ATEEZ", "Lemon Drop – ATEEZ",
+      "Killin' It Girl – j-hope", "1&Only – XLOV", "Sweet Dreams – j-hope & Miguel",
+      "Mona Lisa – j-hope", "Don't Say You Love Me – Jin",
+      "Love Hangover – Jennie feat. Dominic Fike",
+      "Born Again – Lisa feat. Doja Cat & Raye", "Attitude – Ive",
+      "Earthquake – Jisoo", "ExtraL – Jennie feat. Doechii",
+      "LV Bag – Don Toliver, J-Hope & Speedy feat. Pharrell",
+      "Too Bad – G-Dragon & Anderson .Paak",
+      "Fxck Up the World – Lisa feat. Future",
+      "Handlebars – Jennie feat. Dua Lipa", "Zen – Jennie",
+      "Start a War – Jennie", "Damn Right – Jennie, Childish Gambino & Kali Uchis",
+      "Hot – Le Sserafim", "Magnetic – Illit", "Meow – Meovv",
+      "Love 119 – Riize", "Dash – Plave", "I Feel Good – BOYNEXTDOOR",
+      "Nothing Without Your Love – Jin"
+    ];
+
+    function getRandomQuote(emotion) {
+      const list = quotes[emotion];
+      return list ? list[Math.floor(Math.random() * list.length)] : "";
+    }
+
+    function recommendRandom() {
+      const pick = fullSongList[Math.floor(Math.random() * fullSongList.length)];
+      document.getElementById("result").innerHTML = `🎵 <b>오늘의 추천:</b><br>${pick}`;
+    }
+
+    function showEmotionOptions() {
+      document.getElementById("emotion-buttons").style.display = "block";
+    }
+
+    function recommendByEmotion(emotion) {
+      let songs;
+      if (emotion === '전체') {
+        songs = fullSongList.sort(() => 0.5 - Math.random()).slice(0, 5);
+      } else {
+        songs = fullSongList.sort(() => 0.5 - Math.random()).slice(0, 3);
+      }
+      const quote = getRandomQuote(emotion);
+      let html = `💡 <b>${emotion}할 때 들으면 좋은 노래:</b><br>`;
+      html += songs.map(s => `🎶 ${s}`).join('<br>');
+      if (quote) {
+        html += `<div class="quote">"${quote}"</div>`;
+      }
+      document.getElementById("result").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
